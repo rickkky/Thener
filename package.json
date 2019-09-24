@@ -1,0 +1,54 @@
+{
+  "name": "thener",
+  "version": "0.1.0",
+  "description": "Implementation of Promise/A+ specification.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rickkky/Thener.git"
+  },
+  "keywords": [
+    "promise"
+  ],
+  "author": "ricky",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Rickkky/Thener/issues"
+  },
+  "homepage": "https://github.com/Rickkky/Thener#readme",
+  "scripts": {
+    "build": "npx rollup -c",
+    "test": "npm run build && node test/index.js",
+    "commit:cz": "git-cz"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,json,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
+    "babel-eslint": "^10.0.2",
+    "cz-conventional-changelog": "^3.0.2",
+    "eslint": "^6.0.1",
+    "eslint-config-prettier": "^6.1.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "husky": "^3.0.4",
+    "lint-staged": "^9.2.5",
+    "prettier": "1.18.2",
+    "promises-aplus-tests": "^2.1.2",
+    "rollup": "^1.21.4"
+  }
+}
