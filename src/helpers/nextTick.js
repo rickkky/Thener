@@ -1,38 +1,37 @@
+import { isNative } from './is'
+
 let callbacks = []
 let pending = false
-let asyncHandler = setTimeout.bind(null, handleNextTick, 0)
+let asyncHandler = selectAsyncHandler()
 
-function handleNextTick() {
-  const copies = callbacks.slice(0)
+function selectAsyncHandler() {
+  if (typeof Promise !== 'undefined' && isNative(Promise)) {
+    const promise = Promise.resolve()
+    return () => promise.then(nextTickHandler)
+  }
 
+  if (typeof MutationObserver !== 'undefined' && isNative(MutationObserver)) {
+    const observer = new MutationObserver(nextTickHandler)
+    const textNode = document.createTextNode('1')
+    observer.observe(textNode, { characterData: true })
+    return () => (textNode.data = (textNode.data + 1) % 2)
+  }
+
+  return setTimeout.bind(undefined, nextTickHandler, 4)
+}
+
+function nextTickHandler() {
   pending = false
+  const copies = callbacks.slice(0)
   callbacks = []
-
-  copies.forEach((callback) => {
-    callback()
-  })
+  copies.forEach((cb) => cb())
 }
 
-if (typeof MutationObserver !== 'undefined') {
-  let observer = new MutationObserver(handleNextTick)
-  const textNode = document.createTextNode(1)
+export default function nextTick(cb, ctx) {
+  callbacks.push(ctx ? cb.bind(ctx) : cb)
 
-  observer.observe(textNode, { characterData: true })
-
-  asyncHandler = function() {
-    textNode.data = (textNode.data + 1) % 2
+  if (!pending) {
+    pending = true
+    asyncHandler()
   }
 }
-
-const nextTick = function(callback, context) {
-  callbacks.push(context ? callback.bind(context) : callback)
-
-  if (pending) {
-    return
-  }
-
-  pending = true
-  asyncHandler()
-}
-
-export default nextTick

@@ -20,3 +20,9 @@ export function isFunction(value) {
     tag === '[object Proxy]'
   )
 }
+
+export function isNative(Construct) {
+  return (
+    typeof Construct === 'function' && /native code/.test(Construct.toString())
+  )
+}
