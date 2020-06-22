@@ -1,0 +1,35 @@
+{
+  "name": "thener",
+  "version": "0.0.1",
+  "description": "Implementation of Promise/A+ specification.",
+  "keywords": [
+    "promise",
+    "promise/a+"
+  ],
+  "license": "MIT",
+  "author": "ricky",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rickkky/Thener.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Rickkky/Thener/issues"
+  },
+  "homepage": "https://github.com/Rickkky/Thener#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^9.0.1",
+    "@commitlint/config-conventional": "^9.0.1",
+    "husky": "^4.2.5",
+    "prettier": "2.0.5",
+    "pretty-quick": "^2.0.1"
+  }
+}
