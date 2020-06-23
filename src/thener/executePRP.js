@@ -1,44 +1,40 @@
 import getThenMethod from '../utils/getThenMethod'
-import solve from './solve'
 import { isNil } from '../utils/is'
-import Thener from './Thener'
-import executeEntry from './executeEntry'
 
 // execute the promise resolution procedure, see:
 // https://promisesaplus.com/#the-promise-resolution-procedure
-export function executePRP(thener, value) {
+export function executePRP(thener, x) {
   let then = undefined
 
   try {
-    then = getThenMethod(value)
+    then = getThenMethod(x)
   } catch (error) {
-    solve(thener, false, error)
+    thener._solve(false, error)
     return
   }
 
   if (isNil(then)) {
-    solve(thener, true, value)
+    thener._solve(true, x)
     return
   }
 
-  if (value === thener) {
-    solve(
-      thener,
+  if (x === thener) {
+    thener._solve(
       false,
-      new TypeError(`chaining cycle detected for promise ${value}`),
+      new TypeError(`chaining cycle detected for promise ${x}`),
     )
     return
   }
 
-  if (value instanceof Thener) {
+  if (x instanceof thener._construct) {
     then(
-      (value) => executePRP(thener, value),
-      (reason) => solve(thener, false, reason),
+      (value) => thener._executePRP(value),
+      (reason) => thener._solve(false, reason),
     )
     return
   }
 
-  executeEntry(thener, then)
+  thener._executeEntry(then)
 }
 
 export default executePRP

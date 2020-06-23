@@ -1,6 +1,3 @@
-import executePRP from './executePRP'
-import solve from './solve'
-
 export function createResolvers(thener) {
   let called = false
 
@@ -12,11 +9,11 @@ export function createResolvers(thener) {
     called = true
 
     if (fulfilled) {
-      executePRP(thener, value)
+      thener._executePRP(value)
       return
     }
 
-    solve(thener, false, value)
+    thener._solve(false, value)
   }
 
   return {

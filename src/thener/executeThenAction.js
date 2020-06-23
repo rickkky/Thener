@@ -1,30 +1,27 @@
-import { status, answer, PENDING, FULFILLED } from './symbols'
-import solve from './solve'
-import executePRP from './executePRP'
 import nextTick from '../utils/nextTick'
 
-export function executeThenAction(thisThener, action) {
-  const state = thisThener[status]
-  const value = thisThener[answer]
+export function executeThenAction(root, action) {
+  const status = root._status
+  const answer = root._answer
 
-  if (state === PENDING) {
+  if (status === 'PENDING') {
     return
   }
 
-  const { onFulfilled, onRejected, thener } = action
-  const handler = state === FULFILLED ? onFulfilled : onRejected
+  const { thener, onFulfilled, onRejected } = action
+  const handler = status === 'FULFILLED' ? onFulfilled : onRejected
 
   const caller = () => {
-    let x = undefined
+    let value = undefined
 
     try {
-      x = handler(value)
+      value = handler(answer)
     } catch (error) {
-      solve(thener, false, error)
+      thener._solve(false, error)
       return
     }
 
-    executePRP(thener, x)
+    thener._executePRP(value)
   }
 
   nextTick(caller)

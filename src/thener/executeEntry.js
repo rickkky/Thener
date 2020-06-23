@@ -1,7 +1,5 @@
-import createResolvers from './createResolvers'
-
 export function executeEntry(thener, executor) {
-  const { resolve, reject } = createResolvers(thener)
+  const { resolve, reject } = thener._createResolvers()
 
   try {
     executor(resolve, reject)

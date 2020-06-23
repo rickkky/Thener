@@ -1,14 +1,11 @@
-import { status, answer, queue, PENDING, FULFILLED, REJECTED } from './symbols'
-import executeThenAction from './executeThenAction'
-
 export function solve(thener, fulfilled, value) {
-  if (thener[status] !== PENDING) {
+  if (thener._status !== 'PENDING') {
     return
   }
 
-  thener[status] = fulfilled ? FULFILLED : REJECTED
-  thener[answer] = value
-  thener[queue].forEach((action) => executeThenAction(thener, action))
+  thener._status = fulfilled ? 'FULFILLED' : 'REJECTED'
+  thener._answer = value
+  thener._actions.forEach((action) => thener._executeThenAction(action))
 }
 
 export default solve
