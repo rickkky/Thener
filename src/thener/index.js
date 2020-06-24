@@ -7,6 +7,8 @@ import solve from './solve'
 import executeThenAction from './executeThenAction'
 
 export class Thener {
+  /* static methods */
+
   static resolve(value) {
     return new Thener((resolve) => resolve(value))
   }
@@ -15,7 +17,7 @@ export class Thener {
     return new Thener((resolve, reject) => reject(reason))
   }
 
-  _construct = Thener
+  /* private members */
 
   // PENDING, FULFILLED, REJECTED
   _status = 'PENDING'
@@ -30,6 +32,12 @@ export class Thener {
     }
 
     this._executeEntry(executor)
+  }
+
+  /* private getters */
+
+  get _Thener() {
+    return Thener
   }
 
   /* public methods */

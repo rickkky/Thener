@@ -26,7 +26,7 @@ export function executePRP(thener, x) {
     return
   }
 
-  if (x instanceof thener._construct) {
+  if (x instanceof thener._Thener) {
     then(
       (value) => thener._executePRP(value),
       (reason) => thener._solve(false, reason),
