@@ -17,8 +17,8 @@ export function createResolvers(thener) {
   }
 
   return {
-    resolve: resolver.bind(thener, true),
-    reject: resolver.bind(thener, false),
+    resolve: resolver.bind(undefined, true),
+    reject: resolver.bind(undefined, false),
   }
 }
 
