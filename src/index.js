@@ -1,3 +1,3 @@
-import Thener from './thener/index'
+import Thener from './thener';
 
-export default Thener
+export default Thener;

@@ -1,51 +1,49 @@
-import { isNative } from './is'
+import { isNative } from './is';
 
-let callbacks = []
-let pending = false
+let callbacks = [];
+let pending = false;
 
 const flushCallbacks = () => {
-  const prevCallbacks = callbacks
+  const prevCallbacks = callbacks;
+  callbacks = [];
+  pending = false;
+  prevCallbacks.forEach((cb) => cb());
+};
 
-  pending = false
-  callbacks = []
-
-  prevCallbacks.forEach((cb) => cb())
-}
-
-let asyncHandler = undefined
+let asyncHandler = undefined;
 
 if (typeof Promise !== 'undefined' && isNative(Promise)) {
-  const promise = Promise.resolve()
+  const promise = Promise.resolve();
 
   asyncHandler = () => {
-    promise.then(flushCallbacks)
-  }
+    promise.then(flushCallbacks);
+  };
 } else if (
   typeof MutationObserver !== 'undefined' &&
   isNative(MutationObserver)
 ) {
-  const observer = new MutationObserver(flushCallbacks)
-  const node = document.createTextNode('0')
-  observer.observe(node, { characterData: true })
+  const observer = new MutationObserver(flushCallbacks);
+  const node = document.createTextNode('0');
+  observer.observe(node, { characterData: true });
 
   asyncHandler = () => {
-    node.data = `${(parseInt(node.data) + 1) % 2}`
-  }
+    node.data = `${(parseInt(node.data) + 1) % 2}`;
+  };
 } else {
   asyncHandler = () => {
-    setTimeout(flushCallbacks, 0)
-  }
+    setTimeout(flushCallbacks, 0);
+  };
 }
 
 export const nextTick = (cb, ctx = undefined) => {
-  callbacks.push(cb.bind(ctx))
+  callbacks.push(cb.bind(ctx));
 
   if (pending) {
-    return
+    return;
   }
 
-  pending = true
-  asyncHandler()
-}
+  pending = true;
+  asyncHandler();
+};
 
-export default nextTick
+export default nextTick;
